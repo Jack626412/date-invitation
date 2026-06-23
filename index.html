@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Special Question ❤️</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#ffdde1,#ee9ca7);
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:#fff;
+}
+
+.container{
+width:90%;
+max-width:600px;
+background:rgba(255,255,255,0.15);
+padding:30px;
+border-radius:20px;
+backdrop-filter:blur(10px);
+box-shadow:0 0 20px rgba(0,0,0,0.2);
+z-index:10;
+}
+
+h1{
+margin-bottom:20px;
+}
+
+button{
+padding:12px 25px;
+margin:10px;
+border:none;
+border-radius:30px;
+cursor:pointer;
+font-size:18px;
+font-weight:bold;
+transition:.3s;
+}
+
+.yes{
+background:#4CAF50;
+color:white;
+}
+
+.no{
+background:#ff4d6d;
+color:white;
+}
+
+button:hover{
+transform:scale(1.08);
+}
+
+input,select,textarea{
+width:100%;
+padding:12px;
+margin-top:15px;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+textarea{
+height:120px;
+resize:none;
+}
+
+.page{
+display:none;
+}
+
+.active{
+display:block;
+}
+
+.heart{
+position:absolute;
+bottom:-20px;
+color:#ff4d6d;
+font-size:20px;
+animation:float 8s linear infinite;
+opacity:.8;
+}
+
+@keyframes float{
+0%{
+transform:translateY(0) rotate(0deg);
+opacity:1;
+}
+100%{
+transform:translateY(-110vh) rotate(360deg);
+opacity:0;
+}
+}
+</style>
+</head>
+<body>
+
+<audio id="bgMusic" loop>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+
+<!-- Welcome Page -->
+<div id="welcome" class="page active">
+<h1>❤️ A Small Surprise ❤️</h1>
+<p style="margin-bottom:20px;">
+I have something special to ask...
+</p>
+<button class="yes" onclick="startExperience()">Start ❤️</button>
+</div>
+
+<!-- Question -->
+<div id="question" class="page">
+<h1>Will you go on a date with me? ❤️</h1>
+
+<button class="yes" onclick="showPage('datePage')">
+Yes ❤️
+</button>
+
+<button class="no" onclick="showNoMessage()">
+No 😔
+</button>
+</div>
+
+<!-- No Message -->
+<div id="noPage" class="page">
+<h1>🥺 Are You Sure?</h1>
+
+<p style="margin:20px;">
+I was really hoping you'd say yes.
+Would you give it one more thought? ❤️
+</p>
+
+<button class="yes" onclick="showPage('datePage')">
+Okay, Yes ❤️
+</button>
+
+<button class="no" onclick="showPage('question')">
+Let Me Think 🤔
+</button>
+</div>
+
+<!-- Date Selection -->
+<div id="datePage" class="page">
+<h1>📅 Choose a Date</h1>
+
+<input type="date" id="date">
+
+<button class="yes" onclick="nextVenue()">
+Next ➜
+</button>
+</div>
+
+<!-- Venue -->
+<div id="venuePage" class="page">
+<h1>🍽️ Choose a Place</h1>
+
+<select id="venue">
+<option value="">Select Venue</option>
+<option>Cafe Coffee Day</option>
+<option>Domino's</option>
+<option>Barbeque Nation</option>
+<option>Surprise Me ❤️</option>
+</select>
+
+<button class="yes" onclick="nextMessage()">
+Next ➜
+</button>
+</div>
+
+<!-- Message -->
+<div id="messagePage" class="page">
+<h1>💌 Leave a Message</h1>
+
+<textarea id="message"
+placeholder="Write something here..."></textarea>
+
+<button class="yes" onclick="submitForm()">
+Submit ❤️
+</button>
+</div>
+
+<!-- Success -->
+<div id="successPage" class="page">
+<h1>🎉 Thank You ❤️</h1>
+
+<p id="summary" style="margin-top:20px;"></p>
+
+<br>
+
+<p>
+Your response has been sent successfully.
+</p>
+</div>
+
+</div>
+
+<script>
+
+/* GOOGLE FORM IDs */
+const FORM_URL =
+"https://docs.google.com/forms/d/e/1FAIpQLSca6iB2hkyTeHAZtNy4MBj_2B_c3P9boz_zFawXLJzIKrz0oQ/formResponse";
+
+const DATE_ID = "entry.1789542879";
+const VENUE_ID = "entry.2043384364";
+const MESSAGE_ID = "entry.143362257";
+
+/* Start */
+function startExperience(){
+document.getElementById('bgMusic').play();
+showPage('question');
+}
+
+/* Page Navigation */
+function showPage(id){
+document.querySelectorAll('.page')
+.forEach(p=>p.classList.remove('active'));
+
+document.getElementById(id)
+.classList.add('active');
+}
+
+function showNoMessage(){
+showPage('noPage');
+}
+
+function nextVenue(){
+const date=document.getElementById('date').value;
+
+if(!date){
+alert("Please select a date.");
+return;
+}
+
+showPage('venuePage');
+}
+
+function nextMessage(){
+const venue=document.getElementById('venue').value;
+
+if(!venue){
+alert("Please select a venue.");
+return;
+}
+
+showPage('messagePage');
+}
+
+/* Submit */
+function submitForm(){
+
+const date=document.getElementById('date').value;
+const venue=document.getElementById('venue').value;
+const message=document.getElementById('message').value;
+
+const formData = new FormData();
+
+formData.append(DATE_ID,date);
+formData.append(VENUE_ID,venue);
+formData.append(MESSAGE_ID,message);
+
+fetch(FORM_URL,{
+method:"POST",
+mode:"no-cors",
+body:formData
+});
+
+document.getElementById("summary").innerHTML=
+`
+<b>Date:</b> ${date}<br><br>
+<b>Venue:</b> ${venue}<br><br>
+<b>Message:</b> ${message}
+`;
+
+showPage('successPage');
+}
+
+/* Floating Hearts */
+function createHeart(){
+
+const heart=document.createElement("div");
+heart.classList.add("heart");
+
+heart.innerHTML="❤️";
+
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(Math.random()*20+15)+"px";
+heart.style.animationDuration=
+(Math.random()*4+4)+"s";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},8000);
+}
+
+setInterval(createHeart,300);
+
+</script>
+
+</body>
+</html>
